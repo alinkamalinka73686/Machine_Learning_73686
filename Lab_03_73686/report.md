@@ -82,3 +82,4 @@ ordering and large ratios are reliable, not exact values.
   Pareto front in this experiment: the CNN is more accurate with fewer parameters,
   and the MLP is more accurate and faster.
 - **Limitations.** CPU-only, noisy timing, single seed, 5 epochs.
+
