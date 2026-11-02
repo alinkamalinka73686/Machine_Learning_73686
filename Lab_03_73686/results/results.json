@@ -1,0 +1,14 @@
+{
+  "MLP": {
+    "test_acc": 0.882,
+    "params": 235146
+  },
+  "CNN": {
+    "test_acc": 0.8987,
+    "params": 20490
+  },
+  "Attention": {
+    "test_acc": 0.8239,
+    "params": 70794
+  }
+}
