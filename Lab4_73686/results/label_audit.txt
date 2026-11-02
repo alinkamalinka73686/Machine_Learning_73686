@@ -1,0 +1,2 @@
+Conflicting duplicate groups: 5 (10 rows)
+Impossible values in 50 random rows: 0

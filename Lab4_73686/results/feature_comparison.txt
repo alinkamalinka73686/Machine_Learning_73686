@@ -1,0 +1,4 @@
+LogisticRegression baseline (test set, 30%)
+Without derived features: accuracy=0.8540  F1=0.6601
+With derived features:    accuracy=0.8578  F1=0.6696
+Difference:               accuracy=+0.0038  F1=+0.0095

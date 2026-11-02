@@ -1,0 +1,12 @@
+dataset: adult
+openml_version: 2
+seed: 42
+test_size: 0.3
+clip_percentiles:
+- 0.01
+- 0.99
+audit_sample_size: 50
+output_dir: results
+processed_file: results\processed.csv
+processed_rows: 48818
+processed_sha256: c107b49e630cb60cae706c1e52d99da9755ae9b005f854fbd8c9ff5e16d76ead

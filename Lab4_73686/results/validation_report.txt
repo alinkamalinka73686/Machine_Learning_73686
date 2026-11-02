@@ -1,0 +1,32 @@
+== Schema check ==
+ok: age is int
+ok: fnlwgt is int
+ok: education-num is int
+ok: capital-gain is int
+ok: capital-loss is int
+ok: hours-per-week is int
+ok: workclass is category
+ok: education is category
+ok: marital-status is category
+ok: occupation is category
+ok: relationship is category
+ok: race is category
+ok: sex is category
+ok: native-country is category
+ok: income is category
+
+== Range check ==
+age must be in [17, 90]: 0 violations
+hours-per-week must be in [1, 99]: 0 violations
+capital-gain must be in [0, 99999]: 0 violations
+capital-loss must be in [0, 4356]: 0 violations
+
+== Missing values ('?' or NaN counts as missing) ==
+workclass: 0 '?' and 2799 NaN
+occupation: 0 '?' and 2809 NaN
+native-country: 0 '?' and 857 NaN
+
+== Label check ==
+income values: ['<=50K', '>50K']
+
+TOTAL violations: 0 (no rows were dropped)
