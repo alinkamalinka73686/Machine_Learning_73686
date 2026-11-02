@@ -1,4 +1,4 @@
-import random
+﻿import random
 import numpy as np
 import pandas as pd
 from sklearn.datasets import load_breast_cancer
@@ -27,4 +27,5 @@ for name, model in models.items():
     rows.append({"model": name, "test_accuracy": round(acc, 4)})
     print(name, round(acc, 4))
 
-pd.DataFrame(rows).to_csv("lab01/results/baseline_accuracy.csv", index=False)
+pd.DataFrame(rows).to_csv("results/baseline_accuracy.csv", index=False)
+

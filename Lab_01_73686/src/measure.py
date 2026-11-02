@@ -1,4 +1,4 @@
-import random
+﻿import random
 import statistics
 import time
 import os
@@ -59,7 +59,7 @@ def main():
         latency_median_ms = statistics.median(lat)
 
         # Model size
-        path = f"lab01/results/model_{name}.joblib"
+        path = f"results/model_{name}.joblib"
         joblib.dump(model, path)
         size_bytes = os.path.getsize(path)
 
@@ -78,8 +78,9 @@ def main():
         })
         print(rows[-1])
 
-    pd.DataFrame(rows).to_csv("lab01/results/system_cost.csv", index=False)
+    pd.DataFrame(rows).to_csv("results/system_cost.csv", index=False)
 
 
 if __name__ == "__main__":
     main()
+
