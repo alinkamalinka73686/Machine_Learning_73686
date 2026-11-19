@@ -53,7 +53,7 @@ label = None
 try:
     compiled = torch.compile(big)
     with torch.no_grad():
-        compiled(xb)  # ilk çağrı derlemeyi tetikler
+        compiled(xb)
     label = "torch.compile"
 except Exception as e:
     print(f"torch.compile failed ({type(e).__name__}); falling back to torch.jit.trace")
@@ -62,22 +62,21 @@ except Exception as e:
 if compiled is None:
     with torch.no_grad():
         compiled = torch.jit.trace(big, xb)
-        for _ in range(5):  # warm-up
+        for _ in range(5):
             compiled(xb)
     label = "torch.jit.trace"
 
 with torch.no_grad():
-    for _ in range(10):  # warm-up
+    for _ in range(10):
         compiled(xb)
     t_comp = median_time(lambda: compiled(xb))
 print(f"{label}: {t_comp * 1e3:.3f} ms/iter")
 print(f"speedup (eager / compiled): {t_eager / t_comp:.2f}x")
 print()
 
-
 print("=== 3. Tensor properties and contiguity ===")
 A = torch.randn(2048, 2048)
-At = A.t()  # kopyalamadan view: non-contiguous
+At = A.t()
 print("A : shape", tuple(A.shape), "dtype", A.dtype, "stride", A.stride(), "contiguous", A.is_contiguous())
 print("At: shape", tuple(At.shape), "dtype", At.dtype, "stride", At.stride(), "contiguous", At.is_contiguous())
 

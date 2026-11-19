@@ -13,7 +13,7 @@ b_v = [Value(x) for x in b_np]
 c_v = [Value(x) for x in c_np]
 
 terms = [((a_v[i] * b_v[i] + c_v[i]) ** 2).relu() for i in range(N)]
-out = sum(terms)          # sum(): 0 + Value, __radd__ sayesinde çalışır
+out = sum(terms)
 out.backward()
 
 mine_a = np.array([v.grad for v in a_v])
@@ -31,8 +31,10 @@ torch_a = a_t.grad.numpy()
 torch_b = b_t.grad.numpy()
 torch_c = c_t.grad.numpy()
 
+
 def f(a, b, c):
     return np.maximum((a * b + c) ** 2, 0.0).sum()
+
 
 def numeric_grad(which, eps=1e-5):
     args = [a_np.copy(), b_np.copy(), c_np.copy()]
@@ -47,12 +49,15 @@ def numeric_grad(which, eps=1e-5):
         g[i] = (fp - fm) / (2 * eps)
     return g
 
+
 num_a = numeric_grad(0)
 num_b = numeric_grad(1)
 num_c = numeric_grad(2)
 
+
 def maxdiff(x, y):
     return float(np.max(np.abs(x - y)))
+
 
 print("Forward: mine =", out.data, " torch =", loss.item())
 print()
