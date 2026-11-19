@@ -8,7 +8,7 @@ Name: Alina Muradova, Student ID: 73686
 
 Code is in `src/`; run the scripts from inside `src/` (e.g. `cd src` then `python verify.py`).
 
-Screenshots of all outputs are in `screenshots/`.
+Screenshots of all outputs are in `results/`.
 
 
 
