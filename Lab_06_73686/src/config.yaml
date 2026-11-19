@@ -1,0 +1,24 @@
+seed: 42
+experiment_name: lab6
+run_name: baseline_cnn_adam
+results_dir: ./results
+
+data:
+  root: ./data
+  batch_size: 128
+  num_workers: 2
+
+model:
+  name: CNN
+
+train:
+  epochs: 5
+  optimizer: adam
+  lr: 0.001
+  momentum: 0.9
+  weight_decay: 0.0
+  scheduler: none
+
+checkpoint:
+  dir: ./checkpoints
+  save_every: 1
