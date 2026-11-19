@@ -1,3 +1,6 @@
+import math
+
+
 class Value:
     def __init__(self, data, _children=(), _op=""):
         self.data = float(data)
@@ -46,8 +49,25 @@ class Value:
         out._backward = _backward
         return out
 
+    def sigmoid(self):
+        s = 1.0 / (1.0 + math.exp(-self.data))
+        out = Value(s, (self,), "sigmoid")
+
+        def _backward():
+            self.grad += s * (1.0 - s) * out.grad
+        out._backward = _backward
+        return out
+
+    def log(self):
+        out = Value(math.log(self.data), (self,), "log")
+
+        def _backward():
+            self.grad += (1.0 / self.data) * out.grad
+        out._backward = _backward
+        return out
+
     def backward(self):
-        
+        # 1) Topolojik sıralama
         topo = []
         visited = set()
 
@@ -60,10 +80,10 @@ class Value:
 
         build_topo(self)
 
-        
+        # 2) Çıktı gradient'i = 1
         self.grad = 1.0
 
-        
+        # 3) Ters sırada yerel türev kurallarını uygula
         for v in reversed(topo):
             v._backward()
 
