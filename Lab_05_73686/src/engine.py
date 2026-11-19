@@ -67,7 +67,6 @@ class Value:
         return out
 
     def backward(self):
-        # 1) Topolojik sıralama
         topo = []
         visited = set()
 
@@ -80,10 +79,8 @@ class Value:
 
         build_topo(self)
 
-        # 2) Çıktı gradient'i = 1
         self.grad = 1.0
 
-        # 3) Ters sırada yerel türev kurallarını uygula
         for v in reversed(topo):
             v._backward()
 
