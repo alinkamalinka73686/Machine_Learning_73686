@@ -2,7 +2,7 @@
 
 
 
-Name: Adın Soyadın, Student ID: 73686
+Name: Alina Muradova, Student ID: 73686
 
 
 
