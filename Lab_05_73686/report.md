@@ -2,7 +2,17 @@
 
 
 
-\## 1. Autodiff engine (engine.py)
+Name: Adın Soyadın, Student ID: 73686
+
+
+
+Code is in `src/`; run the scripts from inside `src/` (e.g. `cd src` then `python verify.py`).
+
+Screenshots of all outputs are in `screenshots/`.
+
+
+
+\## 1. Autodiff engine (src/engine.py)
 
 A scalar `Value` node stores `data`, `grad`, parent nodes (`\_prev`), the op name (`\_op`)
 
@@ -16,7 +26,7 @@ reverse order and accumulates gradients with `+=` (checked with `y = x\*x`, givi
 
 
 
-\## 2. Verification (verify.py)
+\## 2. Verification (src/verify.py)
 
 Function: `((a\*b + c)\*\*2).relu().sum()`, 6 elements, float64.
 
@@ -28,7 +38,7 @@ Function: `((a\*b + c)\*\*2).relu().sum()`, 6 elements, float64.
 
 
 
-\## 3. Training on make\_moons (train\_moons.py)
+\## 3. Training on make\_moons (src/train\_moons.py)
 
 Architecture 2 -> 8 -> 1 (ReLU, sigmoid), BCE loss, 200 samples, 100 epochs, full-batch, lr 0.5,
 
@@ -52,7 +62,7 @@ closure, while PyTorch runs a few vectorised C++ kernels. Loss and accuracy are 
 
 
 
-\## 4. PyTorch graph, eager vs compiled, contiguity (torch\_inspect.py, test6.py)
+\## 4. PyTorch graph, eager vs compiled, contiguity (src/torch\_inspect.py, src/test6.py)
 
 Graph: `SigmoidBackward0 -> AddmmBackward0 -> (AccumulateGrad, ReluBackward0 -> AddmmBackward0, TBackward0)`.
 
@@ -62,9 +72,9 @@ Graph: `SigmoidBackward0 -> AddmmBackward0 -> (AccumulateGrad, ReluBackward0 -> 
 
 Eager vs compiled (MLP 256-512-512-1, batch 1024, after warm-up):
 
-\- eager: 3.306 ms
+\- eager: 3.591 ms
 
-\- torch.jit.trace: 3.516 ms (0.94x). `torch.compile` failed with an InductorError on this
+\- torch.jit.trace: 3.813 ms (0.94x). `torch.compile` failed with an InductorError on this
 
 &#x20; Windows machine (no C++ compiler toolchain), so tracing was used as the fallback.
 
@@ -74,15 +84,15 @@ Contiguity (2048x2048 float32):
 
 \- `A` stride (2048, 1), contiguous; `A.t()` stride (1, 2048), non-contiguous (a view, no copy).
 
-\- `A + B` both contiguous: 1.257 ms; `At + B` mixed layout: 14.410 ms (11.46x slower);
+\- `A + B` both contiguous: 1.129 ms; `At + B` mixed layout: 14.777 ms (13.09x slower);
 
-&#x20; `At.contiguous() + B`: 1.162 ms.
+&#x20; `At.contiguous() + B`: 1.196 ms.
 
-\- `At + 1` was not slower (0.92x) and `At.sum(0)` was faster (0.36x): non-contiguous is only
+\- `At + 1` was not slower (0.96x) and `At.sum(0)` was faster (0.36x): non-contiguous is only
 
 &#x20; slow when the access pattern defeats cache and vectorisation.
 
-\- `At.contiguous()` itself costs 8.98 ms, so copying pays off only if the tensor is reused.
+\- `At.contiguous()` itself costs 9.574 ms, so copying pays off only if the tensor is reused.
 
 
 
