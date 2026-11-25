@@ -1,15 +1,5 @@
-"""Lab 6 - tek dosyalik cozum (Lab 3 dosyalarina bagimli degil).
+   
 
-Kullanim:
-  python lab6.py train      # Task 1: YAML + checkpoint + MLflow
-  python lab6.py profile    # Task 2: torch.profiler
-  python lab6.py workers    # Task 3: num_workers [0,1,2,4,8]
-  python lab6.py batch      # Task 4: batch size [32..512]
-  python lab6.py sched      # Task 5: schedulers + SGD vs Adam (10 epoch)
-  python lab6.py accum      # Task 6: gradient accumulation (64x4 vs 256)
-  python lab6.py resume     # Task 7: epoch 3'te kes, devam et
-  python lab6.py all        # hepsi
-"""
 import argparse
 import copy
 import json
@@ -31,7 +21,6 @@ from torchvision import datasets, transforms
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
 
-# ----------------------------------------------------------------- models
 class MLP(nn.Module):
     def __init__(self):
         super().__init__()
@@ -75,7 +64,6 @@ class AttentionNet(nn.Module):
 MODELS = {"MLP": MLP, "CNN": CNN, "Attention": AttentionNet}
 
 
-# ----------------------------------------------------------------- helpers
 def load_cfg(path):
     with open(path) as f:
         cfg = yaml.safe_load(f)
@@ -172,7 +160,6 @@ def save_table(rows, path):
     print(text)
 
 
-# ----------------------------------------------------------------- training
 def run_training(cfg, run_name, accum=1, stop_after=None, resume=False):
     """Tek egitim run'i. YAML'dan okur, MLflow'a loglar, checkpoint kaydeder."""
     set_seed(cfg["seed"])
@@ -278,7 +265,6 @@ def run_training(cfg, run_name, accum=1, stop_after=None, resume=False):
                 "test_acc": test_acc, "throughput": thr, "peak_mem_mb": peak}
 
 
-# ----------------------------------------------------------------- tasks
 def cmd_train(cfg):
     run_training(cfg, cfg["run_name"])
 
@@ -335,7 +321,7 @@ def cmd_workers(cfg):
         c = override(cfg, {"data.num_workers": nw, "train.epochs": 1})
         tr, _, _ = get_loaders(c)
         t0 = time.time()
-        for _ in tr:                      # sadece veri yukleme
+        for _ in tr:                      
             pass
         t_data = time.time() - t0
         r = run_training(c, f"workers_{nw}")
