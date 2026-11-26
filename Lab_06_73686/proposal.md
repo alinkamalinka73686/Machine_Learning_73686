@@ -19,7 +19,7 @@ After compression, accuracy should drop by no more than 1 percentage point compa
 I will also test every compressed model on clips with added background noise since a model that only works in a quiet room is not very useful.
 
 
-##Deployment constraints
+## Deployment constraints
 
 Latency of 50 ms or less per clip on CPU with batch size 1. This includes computing the mel spectrogram, not just the model itself.
 Model size of 5 MB or less on disk.
