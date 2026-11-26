@@ -23,17 +23,20 @@ Almost 90% of the time goes into the forward and backward passes. Inside those, 
 
 ## 3. Number of workers
 
-| num_workers | Epoch time (s) | Samples/s |
-|---|---|---|
-| 0 | 11.9 | 4626 |
-| 1 | 13.2 | 4179 |
-| 2 | 16.2 | 3393 |
-| 4 | 25.2 | 2186 |
-| 8 | 34.0 | 1618 |
+I ran 3 epochs for each setting and averaged epochs 2 and 3, because the first epoch includes worker start-up time (on Windows every worker is a new process).
 
-I expected more workers to help, but it was the opposite: 0 workers was the fastest and 8 was almost three times slower. I think the reason is that Fashion-MNIST is tiny and sits in memory, so there is almost nothing for the workers to do. On Windows every worker is a new process, and starting them and passing data between them costs more than it saves. This matches the profile, where data loading was only 5.5% of the epoch. The plot is in `results/workers_plot.png`.
+| num_workers | Epoch time (s) | Samples/s | First epoch (s) |
+|---|---|---|---|
+| 0 | 12.0 | 4583 | 12.0 |
+| 1 | 8.6 | 6433 | 13.9 |
+| 2 | 6.6 | 8397 | 16.0 |
+| 4 | 6.4 | 8594 | 24.7 |
+| 8 | 6.9 | 8029 | 50.2 |
 
-Two things to keep in mind. Each run was only one epoch, so the worker start-up time is included. Also, in `workers_table.md` the `data_share` for 8 workers is above 1. That happened because I measured the data-only time with a separate loader, so it is a measurement problem and not a real share.
+With 0 workers, data loading takes about 40% of the epoch (4.8 s of 12 s), so training is limited by data loading. With 1 worker the epoch drops to about 8.6 s, and with 2 workers to about 6.5 s. After that the time stays flat (4 workers 6.4 s, 8 workers 6.9 s), so the bottleneck moves to computation and more workers do not help. I would use 2 workers.
+
+The first epoch gets slower as workers are added (12.0 s with 0 workers, 50.2 s with 8). This is the start-up cost of the worker processes, and it is the reason my first measurement (one epoch only) wrongly suggested that 0 workers is fastest. The profile in section 2 was taken with 2 workers, where prefetching hides most of the loading time, so its 5.5% is only the waiting time.
+
 
 ## 4. Batch size
 
