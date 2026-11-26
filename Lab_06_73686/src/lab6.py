@@ -1,5 +1,3 @@
-   
-
 import argparse
 import copy
 import json
@@ -161,7 +159,6 @@ def save_table(rows, path):
 
 
 def run_training(cfg, run_name, accum=1, stop_after=None, resume=False):
-    """Tek egitim run'i. YAML'dan okur, MLflow'a loglar, checkpoint kaydeder."""
     set_seed(cfg["seed"])
     tr, va, te = get_loaders(cfg)
     model = MODELS[cfg["model"]["name"]]().to(device)
@@ -318,17 +315,19 @@ def cmd_profile(cfg):
 def cmd_workers(cfg):
     rows = []
     for nw in [0, 1, 2, 4, 8]:
-        c = override(cfg, {"data.num_workers": nw, "train.epochs": 1})
+        c = override(cfg, {"data.num_workers": nw, "train.epochs": 3})
         tr, _, _ = get_loaders(c)
         t0 = time.time()
-        for _ in tr:                      
+        for _ in tr:
             pass
         t_data = time.time() - t0
+        n_train = len(tr.dataset)
+        del tr
         r = run_training(c, f"workers_{nw}")
-        t_epoch = r["history"][0]["epoch_time"]
+        t_epoch = float(np.mean([h["epoch_time"] for h in r["history"][1:]]))
         rows.append({"num_workers": nw, "data_only_s": t_data, "epoch_s": t_epoch,
                      "data_share": t_data / t_epoch,
-                     "samples_per_s": len(tr.dataset) / t_epoch})
+                     "samples_per_s": n_train / t_epoch})
     save_table(rows, os.path.join(cfg["results_dir"], "workers_table.md"))
 
     fig, ax = plt.subplots(1, 2, figsize=(10, 4))
